@@ -99,29 +99,18 @@ public class TicTacToeServer implements ActionListener {
         }
 
         // net
-        Runnable runnable = new Runnable() {
-            public void run() {
-                // net
-                try {
-                    ss = new ServerSocket(4999);
-                    s = ss.accept();
-                    in = new InputStreamReader(s.getInputStream());
-                    bf = new BufferedReader(in);
-                    pr = new PrintWriter(s.getOutputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-                    firstTurn();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+        ss = new ServerSocket(4999);
+        s = ss.accept();
+        in = new InputStreamReader(s.getInputStream());
+        bf = new BufferedReader(in);
+        pr = new PrintWriter(s.getOutputStream());
 
-        new Thread(runnable).start();
-
+        try {
+            firstTurn();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void firstTurn() throws IOException {
