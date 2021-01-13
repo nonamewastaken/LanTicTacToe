@@ -14,9 +14,10 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class TicTacToeServer implements ActionListener, Runnable {
+public class TicTacToeServer implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -115,7 +116,7 @@ public class TicTacToeServer implements ActionListener, Runnable {
                 }
             }
         };
-    
+
         new Thread(runnable).start();
 
     }
@@ -229,6 +230,14 @@ public class TicTacToeServer implements ActionListener, Runnable {
             buttons[i].setEnabled(false);
         }
 
+        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
+
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setText("");
+            buttons[i].setBackground(Color.darkGray);
+            buttons[i].setEnabled(true);
+        }
+
     }
 
     public void oWin(int a, int b, int c) {
@@ -249,11 +258,13 @@ public class TicTacToeServer implements ActionListener, Runnable {
             buttons[i].setEnabled(false);
         }
 
+        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
+
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setText("");
+            buttons[i].setBackground(Color.darkGray);
+            buttons[i].setEnabled(true);
+        }
+
     }
-
-    @Override
-    public void run() {
-
-	}
-
 }
