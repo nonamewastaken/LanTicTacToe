@@ -221,6 +221,7 @@ public class TicTacToeClient implements ActionListener {
             buttons[i].setEnabled(true);
         }
 
+        playerHasWon = false;
         firstTurn();
 
     }
@@ -251,6 +252,7 @@ public class TicTacToeClient implements ActionListener {
             buttons[i].setEnabled(true);
         }
 
+        playerHasWon = false;
         firstTurn();
 
     }

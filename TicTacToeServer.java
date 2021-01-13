@@ -230,6 +230,7 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(true);
         }
 
+        playerHasWon = false;
         firstTurn();
 
     }
@@ -259,6 +260,8 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setBackground(Color.darkGray);
             buttons[i].setEnabled(true);
         }
+
+        playerHasWon = false;
         firstTurn();
 
     }
