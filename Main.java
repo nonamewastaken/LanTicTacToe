@@ -15,7 +15,7 @@ public class Main {
         Thread.sleep(200);
         System.out.println(" \\/   |_|\\___\\/   \\__,_|\\___\\/   \\___/ \\___|");
         Thread.sleep(200);
-        System.out.println("by noname_was_taken\n");
+        System.out.println("by nonamewastaken\n");
         Thread.sleep(200);
 
         System.out.println("What do you wnat to do? \n1) Start server \n2) Start client");

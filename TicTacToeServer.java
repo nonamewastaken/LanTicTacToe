@@ -31,7 +31,11 @@ public class TicTacToeServer implements ActionListener {
                         buttons[i].setText("X");
                         pr.println(i);
                         pr.flush();
-                        checkWin();
+                        try {
+                            checkWin();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                         playerTurn = false;
                     }
                 }
@@ -111,7 +115,6 @@ public class TicTacToeServer implements ActionListener {
                 try {
                     firstTurn();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -170,7 +173,7 @@ public class TicTacToeServer implements ActionListener {
         }
     }
 
-    public void checkWin() {
+    public void checkWin() throws IOException {
 
         // check X win conditions
         if ((buttons[0].getText() == "X") && (buttons[1].getText() == "X") && (buttons[2].getText() == "X")) {
@@ -212,7 +215,7 @@ public class TicTacToeServer implements ActionListener {
 
     }
 
-    public void xWin(int a, int b, int c) {
+    public void xWin(int a, int b, int c) throws IOException {
 
         playerHasWon = true;
 
@@ -238,9 +241,11 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(true);
         }
 
+        firstTurn();
+
     }
 
-    public void oWin(int a, int b, int c) {
+    public void oWin(int a, int b, int c) throws IOException {
 
         playerHasWon = true;
 
@@ -265,6 +270,7 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setBackground(Color.darkGray);
             buttons[i].setEnabled(true);
         }
+        firstTurn();
 
     }
 }
