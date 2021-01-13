@@ -139,8 +139,11 @@ public class TicTacToeServer implements ActionListener {
 
     public void game() throws IOException {
 
+        System.out.println("in game");
+        System.out.println(playerHasWon);
         while (true) {
             if (playerHasWon == true) {
+                System.out.println("exited game");
                 break;
             }
             if (playerTurn == true) {
@@ -160,6 +163,7 @@ public class TicTacToeServer implements ActionListener {
                 playerTurn = true;
             }
         }
+        System.out.println("exited game");
     }
 
     public void checkWin() throws IOException {
@@ -222,17 +226,6 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
-        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
-
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText("");
-            buttons[i].setBackground(Color.darkGray);
-            buttons[i].setEnabled(true);
-        }
-
-        playerHasWon = false;
-        firstTurn();
-
     }
 
     public void oWin(int a, int b, int c) throws IOException {
@@ -253,16 +246,6 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
-        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
-
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText("");
-            buttons[i].setBackground(Color.darkGray);
-            buttons[i].setEnabled(true);
-        }
-
-        playerHasWon = false;
-        firstTurn();
-
     }
+
 }

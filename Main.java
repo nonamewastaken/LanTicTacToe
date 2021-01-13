@@ -3,6 +3,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+
+    static TicTacToeClient client;
+    static TicTacToeServer server;
+
     public static void main(String[] args) throws IOException, InterruptedException {
 
         System.out.println(" _____ _     _____          _____           ");
@@ -18,7 +22,7 @@ public class Main {
         System.out.println("by nonamewastaken\n");
         Thread.sleep(200);
 
-        System.out.println("What do you wnat to do? \n1) Start server \n2) Start client");
+        System.out.println("What do you wnat to do? \n1) Start server \n2) Start client \n3) exit");
         Scanner scanner = new Scanner(System.in);
 
         String input;
@@ -41,14 +45,24 @@ public class Main {
         }
         if (Double.parseDouble(input) == 1) {
 
-            new TicTacToeServer();
+            server = new TicTacToeServer();
         } else if (Double.parseDouble(input) == 2) {
 
-            new TicTacToeClient();
+            client = new TicTacToeClient();
 
         }
 
         scanner.close();
+
+    }
+
+    public static void closeServer() {
+
+
+    }
+
+    public static void closeClient() {
+
 
     }
 

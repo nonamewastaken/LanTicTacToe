@@ -53,10 +53,13 @@ public class TicTacToeClient implements ActionListener {
     boolean playerTurn;
     boolean playerHasWon = false;
     // net
-    PrintWriter pr;
-    Socket s;
-    InputStreamReader in;
-    BufferedReader bf;
+    String ip = JOptionPane.showInputDialog(null, "Please specify which IP adress you wnat to connect to");
+
+    // net
+    Socket s = new Socket(ip, 4999);
+    PrintWriter pr = new PrintWriter(s.getOutputStream());
+    InputStreamReader in = new InputStreamReader(s.getInputStream());
+    BufferedReader bf = new BufferedReader(in);
 
     TicTacToeClient() throws UnknownHostException, IOException {
 
@@ -96,19 +99,13 @@ public class TicTacToeClient implements ActionListener {
 
         }
 
-        String ip = JOptionPane.showInputDialog(null, "Please specify which IP adress you wnat to connect to");
-
-        // net
-        s = new Socket(ip, 4999);
-        pr = new PrintWriter(s.getOutputStream());
-        in = new InputStreamReader(s.getInputStream());
-        bf = new BufferedReader(in);
-
         firstTurn();
 
     }
 
     public void firstTurn() throws IOException {
+
+        System.out.println(playerHasWon);
 
         pr.println("GUI and network set up, waiting for first turn randomizer");
         pr.flush();
@@ -130,27 +127,37 @@ public class TicTacToeClient implements ActionListener {
 
     public void game() throws IOException {
 
+        System.out.println("in game");
+        System.out.println(playerHasWon);
+        System.out.println(playerTurn);
+
         while (true) {
             if (playerHasWon == true) {
+                System.out.println("exited game");
                 break;
             }
             if (playerTurn == true) {
                 Title.setText("X turn");
+                System.out.println("set title");
                 for (int i = 0; i < 9; i++) {
                     buttons[i].setEnabled(false);
                 }
+                System.out.println("running netcode");
                 String str = bf.readLine();
+                System.out.println(str);
                 System.out.println(Integer.parseInt(str));
                 buttons[Integer.parseInt(str)].setText("X");
                 checkWin();
                 playerTurn = false;
             } else if (playerTurn == false) {
                 Title.setText("O turn");
+                System.out.println("set title");
                 for (int i = 0; i < 9; i++) {
                     buttons[i].setEnabled(true);
                 }
             }
         }
+        System.out.println("exited game");
     }
 
     public void checkWin() throws IOException {
@@ -212,18 +219,6 @@ public class TicTacToeClient implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
-
-        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
-
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText("");
-            buttons[i].setBackground(Color.darkGray);
-            buttons[i].setEnabled(true);
-        }
-
-        playerHasWon = false;
-        firstTurn();
-
     }
 
     public void oWin(int a, int b, int c) throws IOException {
@@ -243,17 +238,6 @@ public class TicTacToeClient implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
-
-        JOptionPane.showMessageDialog(null, "Restart?", "Game over!", JOptionPane.OK_OPTION);
-
-        for (int i = 0; i < 9; i++) {
-            buttons[i].setText("");
-            buttons[i].setBackground(Color.darkGray);
-            buttons[i].setEnabled(true);
-        }
-
-        playerHasWon = false;
-        firstTurn();
 
     }
 
