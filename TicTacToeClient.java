@@ -222,8 +222,6 @@ public class TicTacToeClient implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
-        frame.dispose();
-        Main.startClient();
     }
 
     public void oWin(int a, int b, int c) throws IOException {
@@ -243,9 +241,6 @@ public class TicTacToeClient implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
-
-        frame.dispose();
-        Main.startClient();
 
     }
 
