@@ -1,11 +1,14 @@
 import java.io.IOException;
-
+import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class Main {
 
     static TicTacToeClient client;
     static TicTacToeServer server;
+    static String ip;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -21,6 +24,12 @@ public class Main {
         Thread.sleep(200);
         System.out.println("by nonamewastaken\n");
         Thread.sleep(200);
+
+        askForAction();
+
+    }
+
+    public static void askForAction() {
 
         System.out.println("What do you wnat to do? \n1) Start server \n2) Start client \n3) exit");
         Scanner scanner = new Scanner(System.in);
@@ -44,26 +53,39 @@ public class Main {
             }
         }
         if (Double.parseDouble(input) == 1) {
-
-            server = new TicTacToeServer();
+            startServer();
         } else if (Double.parseDouble(input) == 2) {
 
-            client = new TicTacToeClient();
-
+            // net
+            ip = JOptionPane.showInputDialog(null, "Please specify which IP adress you wnat to connect to");
+            startClient();
         }
 
         scanner.close();
+    }
+
+    public static void startServer() {
+
+        try {
+            server = new TicTacToeServer();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
-    public static void closeServer() {
+    public static void startClient() {
 
+        try {
+            client = new TicTacToeClient(ip);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
-
-    public static void closeClient() {
-
-
-    }
-
 }

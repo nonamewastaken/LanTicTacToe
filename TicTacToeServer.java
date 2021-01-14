@@ -14,7 +14,6 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class TicTacToeServer implements ActionListener {
@@ -226,6 +225,9 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
+        frame.dispose();
+        Main.startServer();
+
     }
 
     public void oWin(int a, int b, int c) throws IOException {
@@ -245,6 +247,9 @@ public class TicTacToeServer implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
+
+        frame.dispose();
+        Main.startServer();
 
     }
 

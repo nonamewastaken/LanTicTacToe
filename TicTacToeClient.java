@@ -14,10 +14,14 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class TicTacToeClient implements ActionListener {
+
+    Socket s;
+    PrintWriter pr;
+    InputStreamReader in;
+    BufferedReader bf;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -52,16 +56,14 @@ public class TicTacToeClient implements ActionListener {
     JButton[] buttons = new JButton[9];
     boolean playerTurn;
     boolean playerHasWon = false;
-    // net
-    String ip = JOptionPane.showInputDialog(null, "Please specify which IP adress you wnat to connect to");
 
-    // net
-    Socket s = new Socket(ip, 4999);
-    PrintWriter pr = new PrintWriter(s.getOutputStream());
-    InputStreamReader in = new InputStreamReader(s.getInputStream());
-    BufferedReader bf = new BufferedReader(in);
+    TicTacToeClient(String ip) throws UnknownHostException, IOException {
 
-    TicTacToeClient() throws UnknownHostException, IOException {
+        // net
+        s = new Socket(ip, 4999);
+        pr = new PrintWriter(s.getOutputStream());
+        in = new InputStreamReader(s.getInputStream());
+        bf = new BufferedReader(in);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
@@ -219,6 +221,9 @@ public class TicTacToeClient implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
+
+        frame.dispose();
+        Main.startClient();
     }
 
     public void oWin(int a, int b, int c) throws IOException {
@@ -238,6 +243,9 @@ public class TicTacToeClient implements ActionListener {
         for (int i = 0; i < 9; i++) {
             buttons[i].setEnabled(false);
         }
+
+        frame.dispose();
+        Main.startClient();
 
     }
 
