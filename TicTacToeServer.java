@@ -11,12 +11,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.Random;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-public class TicTacToeServer implements ActionListener {
+public class TicTacToeServer implements ActionListener, Runnable, launcher.killClientCallback, launcher.killServerCallback {
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -25,8 +22,8 @@ public class TicTacToeServer implements ActionListener {
 
         for (int i = 0; i < 9; i++) {
             if (e.getSource() == buttons[i]) {
-                if (playerTurn == true) {
-                    if (buttons[i].getText() == "") {
+                if (playerTurn) {
+                    if (buttons[i].getText().equals("")) {
                         buttons[i].setText("X");
                         pr.println(i);
                         pr.flush();
@@ -51,6 +48,7 @@ public class TicTacToeServer implements ActionListener {
     JButton[] buttons = new JButton[9];
     boolean playerTurn;
     boolean playerHasWon = false;
+    private Thread worker;
     // net
 
     Socket s;
@@ -59,57 +57,62 @@ public class TicTacToeServer implements ActionListener {
     PrintWriter pr;
     ServerSocket ss;
 
-    TicTacToeServer() throws IOException, UnknownHostException {
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800);
-        frame.getContentPane().setBackground(Color.darkGray);
-        frame.setLayout(new BorderLayout());
-        frame.add(titlePanel, BorderLayout.NORTH);
-        frame.setMinimumSize(new Dimension(500, 300));
-        frame.setTitle("you are x");
-
-        title.setBackground(Color.darkGray);
-        title.setForeground(Color.white);
-        title.setFont(new Font("Arial", Font.BOLD, 50));
-        title.setHorizontalAlignment(JLabel.CENTER);
-        title.setText("Tic-Tac-Toe Server");
-        title.setOpaque(true);
-
-        titlePanel.setLayout(new BorderLayout());
-        titlePanel.setBounds(0, 0, 800, 100);
-        titlePanel.add(title);
-
-        playArea.setLayout(new GridLayout(3, 3));
-        playArea.setBackground(Color.darkGray);
-        frame.add(playArea);
-        frame.setVisible(true);
-
-        for (int i = 0; i < 9; i++) {
-
-            buttons[i] = new JButton();
-            playArea.add(buttons[i]);
-            buttons[i].setFont(new Font("Arial", Font.BOLD, 120));
-            buttons[i].setBackground(Color.darkGray);
-            buttons[i].setFocusable(false);
-            buttons[i].addActionListener(this);
-            buttons[i].setEnabled(false);
-
-        }
-
-        // net
-
-        ss = new ServerSocket(4999);
-        s = ss.accept();
-        in = new InputStreamReader(s.getInputStream());
-        bf = new BufferedReader(in);
-        pr = new PrintWriter(s.getOutputStream());
+    @Override
+    public void run() {
 
         try {
-            firstTurn();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800, 800);
+            frame.getContentPane().setBackground(Color.darkGray);
+            frame.setLayout(new BorderLayout());
+            frame.add(titlePanel, BorderLayout.NORTH);
+            frame.setMinimumSize(new Dimension(500, 300));
+            frame.setTitle("you are x");
+
+            title.setBackground(Color.darkGray);
+            title.setForeground(Color.white);
+            title.setFont(new Font("Arial", Font.BOLD, 50));
+            title.setHorizontalAlignment(JLabel.CENTER);
+            title.setText("Tic-Tac-Toe Server");
+            title.setOpaque(true);
+
+            titlePanel.setLayout(new BorderLayout());
+            titlePanel.setBounds(0, 0, 800, 100);
+            titlePanel.add(title);
+
+            playArea.setLayout(new GridLayout(3, 3));
+            playArea.setBackground(Color.darkGray);
+            frame.add(playArea);
+            frame.setVisible(true);
+
+            for (int i = 0; i < 9; i++) {
+
+                buttons[i] = new JButton();
+                playArea.add(buttons[i]);
+                buttons[i].setFont(new Font("Arial", Font.BOLD, 120));
+                buttons[i].setBackground(Color.darkGray);
+                buttons[i].setFocusable(false);
+                buttons[i].addActionListener(this);
+                buttons[i].setEnabled(false);
+
+            }
+
+            // net
+
+            ss = new ServerSocket(4999);
+            s = ss.accept();
+            in = new InputStreamReader(s.getInputStream());
+            bf = new BufferedReader(in);
+            pr = new PrintWriter(s.getOutputStream());
+
+            try {
+                firstTurn();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception ignored) {}
+
     }
 
     public void firstTurn() throws IOException {
@@ -127,11 +130,7 @@ public class TicTacToeServer implements ActionListener {
 
         System.out.println("generated number " + random_num);
 
-        if (random_num == 0) {
-            playerTurn = true;
-        } else if (random_num == 1) {
-            playerTurn = false;
-        }
+        playerTurn = random_num == 0;
 
         game();
     }
@@ -141,16 +140,16 @@ public class TicTacToeServer implements ActionListener {
         System.out.println("in game");
         System.out.println(playerHasWon);
         while (true) {
-            if (playerHasWon == true) {
+            if (playerHasWon) {
                 System.out.println("exited game");
                 break;
             }
-            if (playerTurn == true) {
+            if (playerTurn) {
                 title.setText("X turn");
                 for (int i = 0; i < 9; i++) {
                     buttons[i].setEnabled(true);
                 }
-            } else if (playerTurn == false) {
+            } else {
                 title.setText("O turn");
                 for (int i = 0; i < 9; i++) {
                     buttons[i].setEnabled(false);
@@ -202,12 +201,11 @@ public class TicTacToeServer implements ActionListener {
             oWin(0, 4, 8);
         } else if ((buttons[2].getText() == "O") && (buttons[4].getText() == "O") && (buttons[6].getText() == "O")) {
             oWin(2, 4, 6);
-        } else {
         }
 
     }
 
-    public void xWin(int a, int b, int c) throws IOException {
+    public void xWin(int a, int b, int c) {
 
         playerHasWon = true;
 
@@ -225,9 +223,13 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
+        JOptionPane.showMessageDialog(null, "X won!");
+        killServerCallback();
+        killClientCallback();
+
     }
 
-    public void oWin(int a, int b, int c) throws IOException {
+    public void oWin(int a, int b, int c) {
 
         playerHasWon = true;
 
@@ -245,6 +247,9 @@ public class TicTacToeServer implements ActionListener {
             buttons[i].setEnabled(false);
         }
 
+        JOptionPane.showMessageDialog(null, "O won!");
+        killServerCallback();
+        killClientCallback();
     }
 
 }
